@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JNTUK SGPA & CGPA Calculator</title>
+    <style>
+        body {
+            text-align: center;
+        }
+        #container {
+            display: inline-block;
+            text-align: left;
+        }
+        .course-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        label, input {
+            display: block;
+            margin-bottom: 10px;
+        }
+        .color-picker {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        #sgpa-button, #cgpa-button, #submit-button-sgpa, #submit-button-cgpa {
+            margin-top: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>JNTUK SGPA & CGPA Calculator</h1>
+    <button id="sgpa-button">Calculate SGPA</button>
+    <button id="cgpa-button">Calculate CGPA</button>
+    <div id="container">
+        <div id="course-details"></div>
+        <p>Result: <span id="result"></span></p>
+    </div>
+
+    <script>
+        document.getElementById("sgpa-button").addEventListener("click", function () {
+            const courseDetailsDiv = document.getElementById("course-details");
+            courseDetailsDiv.innerHTML = "";
+
+            const numCourses = parseInt(prompt("Enter the number of subjects:"));
+
+            for (let i = 0; i < numCourses; i++) {
+                courseDetailsDiv.innerHTML += `
+                    <div class="course-section">
+                        <div>
+                            <label for="course-name${i}">Subject Name:</label>
+                            <input type="text" id="course-name${i}">
+                        </div>
+                        <div>
+                            <label for="course-credits${i}">Credits:</label>
+                            <input type="number" id="course-credits${i}" min="1">
+                        </div>
+                        <div>
+                            <label for="grade${i}">Grade:</label>
+                            <input type="text" id="grade${i}">
+                        </div>
+                        <div>
+                            <input type="color" class="color-picker" id="color${i}" value="#ffffff">
+                        </div>
+                    </div>
+                `;
+            }
+
+            courseDetailsDiv.innerHTML += `<button id="submit-button-sgpa">Submit SGPA</button>`;
+
+            document.getElementById("submit-button-sgpa").addEventListener("click", function () {
+                let sgpaNumerator = 0;
+                let totalCredits = 0;
+
+                for (let i = 0; i < numCourses; i++) {
+                    const credits = parseFloat(document.getElementById(`course-credits${i}`).value);
+                    const grade = document.getElementById(`grade${i}`).value;
+                    const gradePoints = {
+                        'A+': 10, 'A': 9, 'B': 8, 'C': 7, 'D': 6, 'E': 5, 'F': 0, 'AB': 0
+                    };
+                    const gradePoint = gradePoints[grade] || 0;
+                    sgpaNumerator += credits * gradePoint;
+                    totalCredits += credits;
+                }
+
+                const sgpa = sgpaNumerator / totalCredits;
+                document.getElementById("result").textContent = `SGPA: ${sgpa.toFixed(2)}`;
+            });
+        });
+
+        document.getElementById("cgpa-button").addEventListener("click", function () {
+            const courseDetailsDiv = document.getElementById("course-details");
+            courseDetailsDiv.innerHTML = "";
+
+            const numSemesters = parseInt(prompt("Enter the number of semesters:"));
+
+            for (let i = 0; i < numSemesters; i++) {
+                courseDetailsDiv.innerHTML += `
+                    <div class="course-section">
+                        <div>
+                            <label for="semester-credits${i}">Credits for Semester ${i + 1}:</label>
+                            <input type="number" id="semester-credits${i}" min="1">
+                        </div>
+                        <div>
+                            <label for="semester-gpa${i}">SGPA for Semester ${i + 1}:</label>
+                            <input type="number" step="0.01" id="semester-gpa${i}" min="0" max="10">
+                        </div>
+                    </div>
+                `;
+            }
+
+            courseDetailsDiv.innerHTML += `<button id="submit-button-cgpa">Submit CGPA</button>`;
+
+            document.getElementById("submit-button-cgpa").addEventListener("click", function () {
+                let cgpaNumerator = 0;
+                let totalCredits = 0;
+
+                for (let i = 0; i < numSemesters; i++) {
+                    const credits = parseFloat(document.getElementById(`semester-credits${i}`).value);
+                    const sgpa = parseFloat(document.getElementById(`semester-gpa${i}`).value);
+                    cgpaNumerator += credits * sgpa;
+                    totalCredits += credits;
+                }
+
+                const cgpa = cgpaNumerator / totalCredits;
+                document.getElementById("result").textContent = `CGPA: ${cgpa.toFixed(2)}`;
+            });
+        });
+    </script>
+</body>
+</html>
