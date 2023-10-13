@@ -1,14 +1,8 @@
 <!DOCTYPE html>
 <html>    
-<center>
-    <ul>
-<li>Provide grades with capital letters only.</li>
-<li>Provide subject names as numbers(1,2,3,...)  </li>
-<li>We have to consider labs as subjects and give the total number of subjects.</li>
-    </ul>
-</center>
+ 
 <head>
-    <title>JNTUK SGPA & CGPA Calculator</title>
+    <title>SGPA & CGPA Calculator</title>
     <style>
         body {
             text-align: center;
@@ -26,26 +20,21 @@
             display: block;
             margin-bottom: 10px;
         }
-        .color-picker {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            margin-right: 10px;
-        }
         #sgpa-button, #cgpa-button, #submit-button-sgpa, #submit-button-cgpa {
-            margin-top: 10px;
+            margin-top: 100px;
+            margin-left: 95px;
             font-size: 16px;
             cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <h1>JNTUK SGPA & CGPA Calculator</h1>
-    <button id="sgpa-button">Calculate SGPA</button>
-    <button id="cgpa-button">Calculate CGPA</button>
+    <h1 style="background-color: rgb(15, 209, 167);color: rgb(5, 5, 5);"> SGPA & CGPA Calculator</h1>
+    <button style="background-color:rgb(15, 209, 167);"id="sgpa-button">Calculate SGPA</button>
+    <button style="background-color: black;color:rgb(15, 209, 167);" id="cgpa-button">Calculate CGPA</button>
     <div id="container">
-        <div id="course-details"></div>
-        <p>Result: <span id="result"></span></p>
+        <div style="color:black;" id="course-details"></div>
+        <p><span id="result"></span></p>
     </div>
 
     <script>
@@ -59,19 +48,16 @@
                 courseDetailsDiv.innerHTML += `
                     <div class="course-section">
                         <div>
-                            <label for="course-name${i}">Subject Name:</label>
-                            <input type="text" id="course-name${i}">
+                            <label for="course-name${i}">Subject Number:</label>
+                            <input type="number" id="course-name${i}">
                         </div>
                         <div>
                             <label for="course-credits${i}">Credits:</label>
                             <input type="number" id="course-credits${i}" min="1">
                         </div>
                         <div>
-                            <label for="grade${i}">Grade:</label>
+                            <label for="grade${i}">YourGrade:</label>
                             <input type="text" id="grade${i}">
-                        </div>
-                        <div>
-                            <input type="color" class="color-picker" id="color${i}" value="#ffffff">
                         </div>
                     </div>
                 `;
@@ -109,7 +95,7 @@
                 courseDetailsDiv.innerHTML += `
                     <div class="course-section">
                         <div>
-                            <label for="semester-credits${i}">Credits for Semester ${i + 1}:</label>
+                            <label for="semester-credits${i}">Total Credits for Semester ${i + 1}:</label>
                             <input type="number" id="semester-credits${i}" min="1">
                         </div>
                         <div>
