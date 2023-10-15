@@ -1,44 +1,116 @@
 <!DOCTYPE html>
-<html>    
- 
+<html>
+
 <head>
     <title>SGPA & CGPA Calculator</title>
     <style>
         body {
             text-align: center;
         }
+
         #container {
             display: inline-block;
             text-align: left;
         }
+
         .course-section {
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
-        label, input {
+
+        label,
+        input {
             display: block;
             margin-bottom: 10px;
         }
-        #sgpa-button, #cgpa-button, #submit-button-sgpa, #submit-button-cgpa {
-            margin-top: 100px;
-            margin-left: 95px;
+
+        #sgpa-button,
+        #cgpa-button,
+        #submit-button-sgpa,
+        #submit-button-cgpa {
+            margin-top: 20px;
             font-size: 16px;
             cursor: pointer;
         }
     </style>
 </head>
+
 <body>
     <h1 style="background-color: rgb(15, 209, 167);color: rgb(5, 5, 5);"> SGPA & CGPA Calculator</h1>
-    <button style="background-color:rgb(15, 209, 167);"id="sgpa-button">Calculate SGPA</button>
-    <button style="background-color: black;color:rgb(15, 209, 167);" id="cgpa-button">Calculate CGPA</button>
+    <button style="background-color: rgb(15, 209, 167);" id="sgpa-button">Calculate SGPA</button>
+    <button style="background-color: black; color: rgb(15, 209, 167);" id="cgpa-button">Calculate CGPA</button>
     <div id="container">
-        <div style="color:black;" id="course-details"></div>
+        <div style="color: black;" id="course-details"></div>
         <p><span id="result"></span></p>
     </div>
 
     <script>
-        document.getElementById("sgpa-button").addEventListener("click", function () {
+        let sgpaButton = document.getElementById("sgpa-button");
+        let cgpaButton = document.getElementById("cgpa-button");
+        let sgpaValues = [];
+
+        function setupFieldNavigation(numCourses) {
+            for (let i = 0; i < numCourses; i++) {
+                const courseNameInput = document.getElementById(`course-name${i}`);
+                const courseCreditsInput = document.getElementById(`course-credits${i}`);
+                const gradeInput = document.getElementById(`grade${i}`);
+
+                courseNameInput.addEventListener("keydown", function (event) {
+                    if (event.key === "Enter") {
+                        event.preventDefault();
+                        courseCreditsInput.focus();
+                    }
+                });
+
+                courseCreditsInput.addEventListener("keydown", function (event) {
+                    if (event.key === "Enter") {
+                        event.preventDefault();
+                        gradeInput.focus();
+                    }
+                });
+
+                gradeInput.addEventListener("keydown", function (event) {
+                    if (event.key === "Enter") {
+                        event.preventDefault();
+                        if (i < numCourses - 1) {
+                            document.getElementById(`course-name${i + 1}`).focus();
+                        } else {
+                            document.getElementById("submit-button-sgpa").click();
+                        }
+                    }
+                });
+            }
+        }
+
+        function setupCGPAFieldNavigation(numSemesters) {
+            for (let i = 0; i < numSemesters; i++) {
+                const semesterCreditsInput = document.getElementById(`semester-credits${i}`);
+                const semesterGPAInput = document.getElementById(`semester-gpa${i}`);
+
+                semesterCreditsInput.addEventListener("keydown", function (event) {
+                    if (event.key === "Enter") {
+                        event.preventDefault();
+                        semesterGPAInput.focus();
+                    }
+                });
+
+                semesterGPAInput.addEventListener("keydown", function (event) {
+                    if (event.key === "Enter") {
+                        event.preventDefault();
+                        if (i < numSemesters - 1) {
+                            document.getElementById(`semester-credits${i + 1}`).focus();
+                        } else {
+                            document.getElementById("submit-button-cgpa").click();
+                        }
+                    }
+                });
+            }
+        }
+
+        sgpaButton.addEventListener("click", function () {
+            sgpaButton.style.display = "none";
+            cgpaButton.style.display = "none";
             const courseDetailsDiv = document.getElementById("course-details");
             courseDetailsDiv.innerHTML = "";
 
@@ -56,7 +128,7 @@
                             <input type="number" id="course-credits${i}" min="1">
                         </div>
                         <div>
-                            <label for="grade${i}">YourGrade:</label>
+                            <label for="grade${i}">Your Grade:</label>
                             <input type="text" id="grade${i}">
                         </div>
                     </div>
@@ -65,7 +137,11 @@
 
             courseDetailsDiv.innerHTML += `<button id="submit-button-sgpa">Submit SGPA</button>`;
 
+            setupFieldNavigation(numCourses);
+
             document.getElementById("submit-button-sgpa").addEventListener("click", function () {
+                sgpaButton.style.display = "inline-block";
+                cgpaButton.style.display = "inline-block";
                 let sgpaNumerator = 0;
                 let totalCredits = 0;
 
@@ -81,13 +157,21 @@
                 }
 
                 const sgpa = sgpaNumerator / totalCredits;
+                sgpaValues.push(sgpa); // Store the SGPA value
                 document.getElementById("result").textContent = `SGPA: ${sgpa.toFixed(2)}`;
             });
         });
 
-        document.getElementById("cgpa-button").addEventListener("click", function () {
+        cgpaButton.addEventListener("click", function () {
+            sgpaButton.style.display = "none";
+            cgpaButton.style.display = "none";
             const courseDetailsDiv = document.getElementById("course-details");
             courseDetailsDiv.innerHTML = "";
+
+            courseDetailsDiv.innerHTML += `<h3>SGPA Values:</h3>`;
+            sgpaValues.forEach(function (sgpa, index) {
+                courseDetailsDiv.innerHTML += `<p>SGPA ${index + 1}: ${sgpa}</p>`;
+            });
 
             const numSemesters = parseInt(prompt("Enter the number of semesters:"));
 
@@ -108,7 +192,11 @@
 
             courseDetailsDiv.innerHTML += `<button id="submit-button-cgpa">Submit CGPA</button>`;
 
+            setupCGPAFieldNavigation(numSemesters);
+
             document.getElementById("submit-button-cgpa").addEventListener("click", function () {
+                sgpaButton.style.display = "inline-block";
+                cgpaButton.style.display = "inline-block";
                 let cgpaNumerator = 0;
                 let totalCredits = 0;
 
@@ -125,4 +213,5 @@
         });
     </script>
 </body>
+
 </html>
