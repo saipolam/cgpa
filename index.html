@@ -21,6 +21,7 @@
 
         label,
         input {
+            
             display: block;
             margin-bottom: 10px;
         }
@@ -124,12 +125,23 @@
                             <input type="number" id="course-name${i}">
                         </div>
                         <div>
-                            <label for="course-credits${i}">Credits:</label>
-                            <input type="number" id="course-credits${i}" min="1">
+                            <label for="course-credits${i}">Credits for the subject:</label>
+                            <input type="number" id="course-credits${i}" min="1" placeholder="credits for subject">
                         </div>
                         <div>
                             <label for="grade${i}">Your Grade:</label>
-                            <input type="text" id="grade${i}">
+                            <select name="grade${i}" id="grade${i}">
+                                <label for="cars">Ur Grade:</label>
+
+                             <option value="A+">A+</option>
+                             <option value="A">A</option>
+                             <option value="B">B</option>
+                             <option value="C">C</option>
+                             <option value="D">D</option>
+                             <option value="E">E</option>
+                             <option value="F">F</option>
+                             <option value="AB">AB</option>
+                            </select>
                         </div>
                     </div>
                 `;
