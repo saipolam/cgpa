@@ -38,9 +38,8 @@
 </head>
 
 <body>
-    Provide grades with capital letters only.
-    Provide subject names as numbers(1,2,3,...)  
-    We have to consider labs as subjects and give the total number of subjects.
+      
+    
     <h1 style="background-color: rgb(15, 209, 167);color: rgb(5, 5, 5);"> SGPA & CGPA Calculator</h1>
     <button style="background-color: rgb(15, 209, 167);" id="sgpa-button">Calculate SGPA</button>
     <button style="background-color: black; color: rgb(15, 209, 167);" id="cgpa-button">Calculate CGPA</button>
@@ -118,14 +117,14 @@
             const courseDetailsDiv = document.getElementById("course-details");
             courseDetailsDiv.innerHTML = "";
 
-            const numCourses = parseInt(prompt("Enter the number of subjects:"));
+            const numCourses = parseInt(prompt("Enter the number of subjects(Consider labs as subjects)");
 
             for (let i = 0; i < numCourses; i++) {
                 courseDetailsDiv.innerHTML += `
                     <div class="course-section">
                         <div>
                             <label for="course-name${i}">Subject Number:</label>
-                            <input type="number" id="course-name${i}">
+                            <input type="number" id="course-name${i}" placeholder="Provide subject names as numbers(1,2,3,...)">
                         </div>
                         <div>
                             <label for="course-credits${i}">Credits for the subject:</label>
