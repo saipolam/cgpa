@@ -7,7 +7,6 @@
         body {
             text-align: center;
         }
-
         #container {
             display: inline-block;
             text-align: left;
@@ -21,7 +20,6 @@
 
         label,
         input {
-            
             display: block;
             margin-bottom: 10px;
         }
@@ -38,7 +36,7 @@
 </head>
 
 <body>
-    <h1 style="background-color: rgb(15, 209, 167);color: rgb(5, 5, 5);"> SGPA & CGPA Calculator</h1>
+    <h1 style="background-color: rgb(15, 209, 167); color: rgb(5, 5, 5);"> SGPA & CGPA Calculator</h1>
     <button style="background-color: rgb(15, 209, 167);" id="sgpa-button">Calculate SGPA</button>
     <button style="background-color: black; color: rgb(15, 209, 167);" id="cgpa-button">Calculate CGPA</button>
     <div id="container">
@@ -50,19 +48,12 @@
         let sgpaButton = document.getElementById("sgpa-button");
         let cgpaButton = document.getElementById("cgpa-button");
         let sgpaValues = [];
+        let sgpaCredits = [];
 
         function setupFieldNavigation(numCourses) {
             for (let i = 0; i < numCourses; i++) {
-                const courseNameInput = document.getElementById(`course-name${i}`);
                 const courseCreditsInput = document.getElementById(`course-credits${i}`);
                 const gradeInput = document.getElementById(`grade${i}`);
-
-                courseNameInput.addEventListener("keydown", function (event) {
-                    if (event.key === "Enter") {
-                        event.preventDefault();
-                        courseCreditsInput.focus();
-                    }
-                });
 
                 courseCreditsInput.addEventListener("keydown", function (event) {
                     if (event.key === "Enter") {
@@ -75,7 +66,7 @@
                     if (event.key === "Enter") {
                         event.preventDefault();
                         if (i < numCourses - 1) {
-                            document.getElementById(`course-name${i + 1}`).focus();
+                            document.getElementById(`course-credits${i + 1}`).focus();
                         } else {
                             document.getElementById("submit-button-sgpa").click();
                         }
@@ -115,32 +106,31 @@
             const courseDetailsDiv = document.getElementById("course-details");
             courseDetailsDiv.innerHTML = "";
 
-            const numCourses = parseInt(prompt("Enter the number of subjects(Consider labs as subjects)"));
+            const numCourses = parseInt(prompt("Enter the number of subjects (Consider labs as subjects)"));
 
             for (let i = 0; i < numCourses; i++) {
+                const subjectNumber = i + 1; // Automatically generate subject numbers
                 courseDetailsDiv.innerHTML += `
                     <div class="course-section">
                         <div>
                             <label for="course-name${i}">Subject Number:</label>
-                            <input type="number" id="course-name${i}" style="overflow:  scroll"placeholder="Provide subject names as numbers(1,2,3,...)">
+                            <input type="text" id="course-name${i}" value="${subjectNumber}" readonly>
                         </div>
                         <div>
                             <label for="course-credits${i}">Credits for the subject:</label>
-                            <input type="number" id="course-credits${i}" min="1" placeholder="credits for subject">
+                            <input type="number" id="course-credits${i}" min="1" placeholder="Credits for subject">
                         </div>
                         <div>
                             <label for="grade${i}">Your Grade:</label>
                             <select name="grade${i}" id="grade${i}">
-                                <label for="cars">Ur Grade:</label>
-
-                             <option value="A+">A+</option>
-                             <option value="A">A</option>
-                             <option value="B">B</option>
-                             <option value="C">C</option>
-                             <option value="D">D</option>
-                             <option value="E">E</option>
-                             <option value="F">F</option>
-                             <option value="AB">AB</option>
+                                <option value="A+">A+</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                                <option value="AB">AB</option>
                             </select>
                         </div>
                     </div>
@@ -160,9 +150,7 @@
                 for (let i = 0; i < numCourses; i++) {
                     const credits = parseFloat(document.getElementById(`course-credits${i}`).value);
                     const grade = document.getElementById(`grade${i}`).value;
-                    const gradePoints = {
-                        'A+': 10, 'A': 9, 'B': 8, 'C': 7, 'D': 6, 'E': 5, 'F': 0, 'AB': 0
-                    };
+                    const gradePoints = { 'A+': 10, 'A': 9, 'B': 8, 'C': 7, 'D': 6, 'E': 5, 'F': 0, 'AB': 0 };
                     const gradePoint = gradePoints[grade] || 0;
                     sgpaNumerator += credits * gradePoint;
                     totalCredits += credits;
@@ -170,6 +158,7 @@
 
                 const sgpa = sgpaNumerator / totalCredits;
                 sgpaValues.push(sgpa); // Store the SGPA value
+                sgpaCredits.push(totalCredits); // Store the total credits for SGPA
                 document.getElementById("result").textContent = `SGPA: ${sgpa.toFixed(2)}`;
             });
         });
@@ -182,7 +171,7 @@
 
             courseDetailsDiv.innerHTML += `<h3>SGPA Values:</h3>`;
             sgpaValues.forEach(function (sgpa, index) {
-                courseDetailsDiv.innerHTML += `<p>SGPA ${index + 1}: ${sgpa}</p>`;
+                courseDetailsDiv.innerHTML += `<p>SGPA ${index + 1}: ${sgpa.toFixed(2)} (Credits: ${sgpaCredits[index]})</p>`;
             });
 
             const numSemesters = parseInt(prompt("Enter the number of semesters:"));
@@ -192,11 +181,11 @@
                     <div class="course-section">
                         <div>
                             <label for="semester-credits${i}">Total Credits for Semester ${i + 1}:</label>
-                            <input type="number" id="semester-credits${i}" min="1">
+                            <input type="number" id="semester-credits${i}" min="1" placeholder="Credits for semester">
                         </div>
                         <div>
                             <label for="semester-gpa${i}">SGPA for Semester ${i + 1}:</label>
-                            <input type="number" step="0.01" id="semester-gpa${i}" min="0" max="10">
+                            <input type="number" step="0.01" id="semester-gpa${i}" min="0" max="10" placeholder="SGPA">
                         </div>
                     </div>
                 `;
